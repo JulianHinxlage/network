@@ -3,11 +3,13 @@ set(CMAKE_CXX_STANDARD 20)
 
 
 project(Network)
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/util/*.cpp src/net/*.cpp)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/util/*.cpp src/crypto/*.cpp src/net/*.cpp)
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 include_directories(${PROJECT_NAME} PUBLIC src)
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
 endif()
 
 find_package(OpenSSL REQUIRED)
@@ -27,6 +29,18 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Network)
 
 project(test_udp)
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/test/test_udp.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES})
+include_directories(${PROJECT_NAME} PUBLIC src)
+target_link_libraries(${PROJECT_NAME} PRIVATE Network)
+
+project(test_server)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/test/test_server.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES})
+include_directories(${PROJECT_NAME} PUBLIC src)
+target_link_libraries(${PROJECT_NAME} PRIVATE Network)
+
+project(test_crypto)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/test/test_crypto.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES})
 include_directories(${PROJECT_NAME} PUBLIC src)
 target_link_libraries(${PROJECT_NAME} PRIVATE Network)

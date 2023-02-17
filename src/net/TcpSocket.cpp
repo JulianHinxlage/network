@@ -3,6 +3,7 @@
 //
 
 #include "TcpSocket.h"
+#include <cstring>
 
 #if WIN32
 #include <winsock2.h>
@@ -68,7 +69,11 @@ namespace net {
 		if (prefereIpv4) {
 			addr4.sin_family = AF_INET;
 			addr4.sin_port = htons(port);
+#if WIN32
 			addr4.sin_addr.S_un.S_addr = INADDR_ANY;
+#else
+			addr4.sin_addr.s_addr = INADDR_ANY;
+#endif
 		}
 		else {
 			addr6.sin6_family = AF_INET6;
@@ -140,7 +145,7 @@ namespace net {
 		handle = -1;
 #else
 		int status = shutdown(handle, SHUT_RDWR);
-		status = close(handle);
+		status = ::close(handle);
 		handle = -1;
 #endif
 		connected = false;

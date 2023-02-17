@@ -3,6 +3,7 @@
 //
 
 #include "UdpSocket.h"
+#include <cstring>
 
 #if WIN32
 #include <winsock2.h>
@@ -42,7 +43,11 @@ namespace net {
 		if (prefereIpv4) {
 			addr4.sin_family = AF_INET;
 			addr4.sin_port = htons(port);
+#if WIN32
 			addr4.sin_addr.S_un.S_addr = INADDR_ANY;
+#else
+			addr4.sin_addr.s_addr = INADDR_ANY;
+#endif
 		}
 		else {
 			addr6.sin6_family = AF_INET6;
@@ -89,7 +94,7 @@ namespace net {
 #else
 		int status = shutdown(handle, SHUT_RDWR);
 		if (status == 0) {
-			status = close(handle);
+			status = ::close(handle);
 			handle = -1;
 		}
 #endif
@@ -104,7 +109,7 @@ namespace net {
 	}
 
 	ErrorCode UdpSocket::read(void* data, int& bytes, Endpoint& endpoint) {
-		int size = sizeof(Endpoint);
+		socklen_t size = sizeof(Endpoint);
 		bytes = ::recvfrom(handle, (char*)data, bytes, 0, (sockaddr*)endpoint.getHandle(), &size);
 		if (bytes <= 0) {
 			return getLastError();

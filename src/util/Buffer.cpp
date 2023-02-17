@@ -3,6 +3,7 @@
 //
 
 #include "Buffer.h"
+#include <cstring>
 
 Buffer::Buffer() {
 	dataPtr = nullptr;
@@ -41,11 +42,20 @@ void Buffer::skip(int bytes) {
 }
 
 void Buffer::unskip(int bytes) {
-	readIndex -= bytes;
+	readIndex =  std::max(0, readIndex - bytes);
+}
+
+void Buffer::skipWrite(int bytes) {
+	writeIndex += bytes;
+}
+
+void Buffer::unskipWrite(int bytes) {
+	writeIndex = std::max(0, writeIndex - bytes);
 }
 
 void Buffer::reset() {
 	readIndex = 0;
+	writeIndex = 0;
 }
 
 uint8_t* Buffer::data() {
@@ -54,6 +64,14 @@ uint8_t* Buffer::data() {
 
 int Buffer::size() {
 	return dataSize - readIndex;
+}
+
+uint8_t* Buffer::dataWrite() {
+	return dataPtr + writeIndex;
+}
+
+int Buffer::sizeWrite() {
+	return dataSize - writeIndex;
 }
 
 void Buffer::reserve(int bytes) {

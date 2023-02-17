@@ -37,6 +37,8 @@ namespace net {
 			return "RESET";
 		case ErrorCode::ENDPOINT_IN_USE:
 			return "ENDPOINT_IN_USE";
+		case ErrorCode::INVALID_PACKET:
+			return "INVALID_PACKET";
 		default:
 			return "UNDEFINED";
 		}
@@ -52,6 +54,8 @@ namespace net {
 		switch (internal) {
 		case 0:
 			return ErrorCode::NO_ERROR;
+		case WSAEINTR:
+			return ErrorCode::DISCONNECTED;
 		case WSAECONNREFUSED:
 			return ErrorCode::CONNECTION_REFUSED;
 		case WSAETIMEDOUT:
@@ -99,7 +103,7 @@ namespace net {
 		return str;
 	}
 
-#elif
+#else
 
 	ErrorCode getLastError() {
 		return ErrorCode::GENERAL_ERROR;

@@ -17,9 +17,15 @@ public:
 
     void skip(int bytes);
     void unskip(int bytes);
+    void skipWrite(int bytes);
+    void unskipWrite(int bytes);
+
     void reset();
     uint8_t* data();
     int size();
+    uint8_t* dataWrite();
+    int sizeWrite();
+
     void reserve(int bytes);
     void setData(void* data, int bytes);
     void clear();

@@ -15,6 +15,7 @@ namespace net {
 		RESET,
 		INVALID_ENDPOINT,
 		ENDPOINT_IN_USE,
+		INVALID_PACKET,
 	};
 
 	const char* getErrorString(ErrorCode error);
