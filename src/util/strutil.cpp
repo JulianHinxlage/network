@@ -3,6 +3,7 @@
 //
 
 #include "strutil.h"
+#include <fstream>
 
 std::vector<std::string> strSplit(const std::string& string, const std::string& delimiter, bool includeEmpty) {
     std::vector<std::string> parts;
@@ -74,4 +75,14 @@ std::string strToUpper(const std::string& str) {
         result.push_back(std::toupper(c));
     }
     return result;
+}
+
+std::string strReadFile(const std::string& file) {
+    std::ifstream stream(file);
+    if (stream.is_open()) {
+        return std::string((std::istreambuf_iterator<char>(stream)), (std::istreambuf_iterator<char>()));
+    }
+    else {
+        return "";
+    }
 }

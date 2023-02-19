@@ -13,3 +13,4 @@ std::string strJoin(const std::vector<std::string>& strings, const std::string& 
 std::string strReplace(const std::string& string, const std::string& search, const std::string& replacement);
 std::string strToLower(const std::string& str);
 std::string strToUpper(const std::string& str);
+std::string strReadFile(const std::string& file);
